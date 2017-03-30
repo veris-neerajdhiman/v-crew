@@ -35,6 +35,8 @@ urlpatterns = [
     url(r'^auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^docs/', include_docs_urls(title=API_TITLE, description='')),
 
+    url(r'^micro-service/', include('apps.urls', namespace='apps_urls')),
+
 ]
 
 if settings.DEBUG:
