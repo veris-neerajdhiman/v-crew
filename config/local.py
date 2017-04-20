@@ -79,9 +79,6 @@ CELERY_ALWAYS_EAGER = True
 ########## PROJECT SPECIFIC CONFIGURATION
 
 
-##### Server URL ########
-SERVER_URL = get_env_setting('SERVER_URL')
-
 # ######### DJANGO REST FRAMEWORK CONFIGURATION
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -109,3 +106,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 50
 }
+
+# Authentication (User) Server URl :
+USER_SERVER_URL = 'http://local.veris.in:8016/'
