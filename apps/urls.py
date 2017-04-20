@@ -20,10 +20,12 @@ from django.conf.urls import include, url
 
 # local
 from apps.organization import routers as org_router
+from apps.members import routers as member_router
 
 # own app
 
 
 urlpatterns = [
     url(r'', include(org_router)),
+    url(r'', include(member_router)),
 ]
