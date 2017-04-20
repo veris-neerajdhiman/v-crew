@@ -14,8 +14,9 @@
 from __future__ import unicode_literals
 
 # 3rd party
-from imagekit.models.fields import ProcessedImageField
-from pilkit.processors.resize import ResizeToFit
+import uuid
+from imagekit.models import ImageSpecField
+from pilkit.processors.resize import ResizeToFill
 
 # Django
 from django.db import models
@@ -39,20 +40,28 @@ class Organization(models.Model):
         max_length=64,
         help_text=_('Required. 64 characters or fewer.')
     )
-    logo = ProcessedImageField(
-        upload_to=media_folder,
-        null=False,
-        blank=False,
-        processors=[ResizeToFit(1024, 1024, upscale=False)]
+    avatar = models.ImageField(
+        _('Organization Logo'),
+        upload_to=media_folder
+    )
+    avatar_thumbnail = ImageSpecField(
+        source='avatar',
+        processors=[ResizeToFill(100, 50)],
+        format='JPEG',
+        options={'quality': 60}
+    )
+    owner = models.UUIDField(
+        _('Owner Unique Identifier'),
+        help_text=_('User uuid, this token will identify who is the owner of respective Organization.'),
     )
     created_at = models.DateTimeField(
         _('Organization Creation time.'),
-        auto_now=False,
+        auto_now_add=True,
         db_index=True,
     )
     modified_at = models.DateTimeField(
         _('Organization Modification time.'),
-        auto_now=False,
+        auto_now=True,
         db_index=True,
     )
 

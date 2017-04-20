@@ -24,10 +24,20 @@ from apps.organization import models
 
 
 class OrganizationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'logo', 'created_at', 'modified_at', )
+    list_display = ('id', 'name', 'avatar_thumbnail', 'owner', 'created_at', 'modified_at', )
     list_display_links = ('id', 'name', )
     search_fields = ('name', )
     list_per_page = 20
     ordering = ('-id', )
+
+    def avatar_thumbnail(self, obj):
+        """
+
+        :param obj: Organization instance
+        :return: user avatar thumbanil
+        """
+        return '<img width="36" height="36" src="%s"/>' % obj.avatar_thumbnail.url if bool(obj.avatar_thumbnail) else ''
+
+    avatar_thumbnail.allow_tags = True
 
 admin.site.register(models.Organization, OrganizationAdmin)

@@ -12,7 +12,6 @@
 from __future__ import unicode_literals
 
 # 3rd party
-from rest_framework import routers
 
 # Django
 from django.conf.urls import url
@@ -21,12 +20,24 @@ from django.conf.urls import url
 from apps.organization import views
 
 
-router = routers.SimpleRouter()
-router.register('organization', views.OrganizationViewSet)
+UUID_REGEX = '[0-9a-fA-F]{8}-(?:[0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}'
+
+organization_list = views.OrganizationViewSet.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+organization_detail = views.OrganizationViewSet.as_view({
+    'get': 'retrieve',
+    'patch': 'partial_update',
+    'delete': 'destroy'
+})
 
 
 urlpatterns = [
-
+    url(r'^user/(?P<owner>{uuid})/organization/$'.format(uuid=UUID_REGEX),
+        organization_list,
+        name='organization-list'),
+    url(r'^user/(?P<owner>{uuid})/organization/(?P<pk>\d+)/$'.format(uuid=UUID_REGEX),
+        organization_detail,
+        name='organization-detail'),
 ]
-
-urlpatterns += router.urls
