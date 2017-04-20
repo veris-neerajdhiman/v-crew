@@ -9,6 +9,7 @@
  """
 
 # django
+from django.conf import settings
 
 MAXLENGTH = 8
 TERMINAL = 'terminal'
@@ -18,3 +19,8 @@ MEMBER_TYPES = (
     (TERMINAL, TERMINAL),
     (USER, USER),
 )
+
+DEFAULT_IMAGE_NAME = 'images/placeholder.png'
+DEFAULT_IMAGE_PATH = '{0}/{1}'.format(settings.STATIC_ROOT, DEFAULT_IMAGE_NAME)
+USER_CREATE_API = '/micro-service/user/'
+USER_SERVER_URL = getattr(settings, 'USER_SERVER_URL', None)

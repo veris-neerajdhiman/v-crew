@@ -12,9 +12,10 @@
 from __future__ import unicode_literals
 
 # 3rd party
+import requests
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
-
+from rest_framework.exceptions import NotAcceptable
 # Django
 
 # local
@@ -50,3 +51,45 @@ class MemberAddSerializer(serializers.ModelSerializer):
                 fields=('email', 'organization', )
            )
         ]
+
+    def _get_user_api(self):
+        """
+
+        """
+        if config.USER_SERVER_URL.endswith('/') and config.USER_CREATE_API.startswith('/'):
+            return '{0}{1}'.format(config.USER_SERVER_URL[:-1], config.USER_CREATE_API)
+        elif not config.USER_SERVER_URL.endswith('/') and not config.USER_CREATE_API.startswith('/'):
+            return '{0}/{1}'.format(config.USER_SERVER_URL, config.USER_CREATE_API)
+        return '{0}{1}'.format(config.USER_SERVER_URL, config.USER_CREATE_API)
+
+    def _get_default_image(self):
+        """
+        """
+        return config.DEFAULT_IMAGE_PATH
+
+    def _get_or_create_shadow_user(self, email):
+        """
+            - Here we manage creation of Shadow User in Authentication Server.
+            - First we will check wether user with same email if not only then we will create shadow user.
+        """
+        url = self._get_user_api()
+        image = open(self._get_default_image(), 'rb')
+
+        # ToDo : Not checking for any error in below API
+        rq = requests.post(url, files={'avatar': image}, data={'email': email})
+
+    def create(self, validated_data):
+        """
+
+        :param validated_data: Validated data.
+        """
+        # check User Server Url has been set mentioned or not
+        if config.USER_SERVER_URL is None:
+            raise NotAcceptable('you have not mentioned User Server Url in settings.')
+
+        member = super(MemberAddSerializer, self).create(validated_data)
+
+        # create shadow user
+        email = validated_data.get('email')
+        self._get_or_create_shadow_user(email)
+        return member
