@@ -36,7 +36,7 @@ class IsUserOrganizationOwner(permissions.BasePermission):
         """
         filters = {
             'owner': request.parser_context['kwargs'].get('owner'),
-            'pk': request.parser_context['kwargs'].get('organization')
+            'token': request.parser_context['kwargs'].get('organization')
         }
         if not Organization.objects.filter(**filters):
             raise CustomForbidden

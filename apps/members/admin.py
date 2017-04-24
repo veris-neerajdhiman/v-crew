@@ -35,4 +35,4 @@ class MemberAdmin(admin.ModelAdmin):
     ordering = ('-id', )
     list_per_page = 20
 
-admin.site.register(models.Member, MemberAdmin)
+# admin.site.register(models.Member, MemberAdmin)

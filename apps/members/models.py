@@ -43,6 +43,7 @@ class Member(models.Model):
         help_text=_('Primary Contact of Member, immutable.')
     )
     organization = models.ForeignKey(Organization,
+        to_field='token',
         on_delete=models.CASCADE,
         help_text=_('Member Organization.')
     )

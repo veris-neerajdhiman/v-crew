@@ -31,7 +31,13 @@ from apps.utils import media_folder
 class Organization(models.Model):
     """
     """
-
+    token = models.UUIDField(
+        _('Organization Unique Identifier'),
+        default=uuid.uuid4,
+        unique=True,
+        editable=False,
+        help_text=_('Organization uuid, this token will uniquely identify Organization.'),
+    )
     # attributes
     name = models.CharField(
         _('Organization Name'),

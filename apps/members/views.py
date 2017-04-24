@@ -50,7 +50,7 @@ class MemberViewSet(mixins.MultipleFieldLookupMixin, viewsets.ModelViewSet):
 
         :param request: Django request
         :param owner: owner/user uuid
-        :param organization: organization id.
+        :param organization: organization token.
         :return: Just created Organization
         """
 

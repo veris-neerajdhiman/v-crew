@@ -37,7 +37,7 @@ urlpatterns = [
     url(r'^user/(?P<owner>{uuid})/organization/$'.format(uuid=UUID_REGEX),
         organization_list,
         name='organization-list'),
-    url(r'^user/(?P<owner>{uuid})/organization/(?P<pk>\d+)/$'.format(uuid=UUID_REGEX),
+    url(r'^user/(?P<owner>{uuid})/organization/(?P<token>{uuid})/$'.format(uuid=UUID_REGEX),
         organization_detail,
         name='organization-detail'),
 ]
