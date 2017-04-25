@@ -47,6 +47,12 @@ class Member(models.Model):
         on_delete=models.CASCADE,
         help_text=_('Member Organization.')
     )
+    user = models.UUIDField(
+        _('Member associated User UUID'),
+        null=False,
+        blank=False,
+        help_text=_('User uuid, this uid will identify associated User with respective Member.'),
+    )
     type = models.CharField(
         _('Member type.'),
         max_length=config.MAXLENGTH,

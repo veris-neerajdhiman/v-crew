@@ -27,10 +27,10 @@ class MemberAdmin(admin.ModelAdmin):
     """
 
     """
-    list_display = ('id', 'name', 'email', 'organization', 'type', )
+    list_display = ('id', 'name', 'email', 'organization', 'user', 'type', )
     list_display_links = ('id', 'name', 'email', )
     list_filter = ('type', )
-    search_fields = ('name', 'email', 'organization__name', 'organization__token')
+    search_fields = ('name', 'email', 'organization__name', 'organization__token', 'user')
     raw_id_fields = ['organization', ]
     ordering = ('-id', )
     list_per_page = 20

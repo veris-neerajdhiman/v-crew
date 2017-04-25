@@ -39,6 +39,7 @@ class MemberAddSerializer(serializers.ModelSerializer):
 
     """
     email = serializers.EmailField(required=False,)
+    user = serializers.UUIDField(required=False)  # to be added later when we willa dd shadow user
     type = serializers.ChoiceField(required=True,
                                    choices=config.MEMBER_TYPES)
 
@@ -76,7 +77,7 @@ class MemberAddSerializer(serializers.ModelSerializer):
         image = open(self._get_default_image(), 'rb')
 
         # ToDo : Not checking for any error in below API
-        rq = requests.post(url, files={'avatar': image}, data={'email': email})
+        return requests.post(url, files={'avatar': image}, data={'email': email}).json()
 
     def create(self, validated_data):
         """
@@ -87,9 +88,12 @@ class MemberAddSerializer(serializers.ModelSerializer):
         if config.USER_SERVER_URL is None:
             raise NotAcceptable('you have not mentioned User Server Url in settings.')
 
-        member = super(MemberAddSerializer, self).create(validated_data)
-
-        # create shadow user
+        # create shadow user and save user token in Member instance
         email = validated_data.get('email')
-        self._get_or_create_shadow_user(email)
-        return member
+        user = self._get_or_create_shadow_user(email)
+
+        validated_data.update({
+            'user': user.get('uuid')
+        })
+
+        return super(MemberAddSerializer, self).create(validated_data)
