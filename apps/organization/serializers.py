@@ -27,12 +27,12 @@ class OrganizationSerializer(serializers.ModelSerializer):
     """
 
     """
-    token = serializers.CharField(read_only=True)
+    uuid = serializers.CharField(source='token', read_only=True)
     avatar_thumbnail = serializers.ImageField(read_only=True)
 
     class Meta:
         model = models.Organization
-        exclude = ('id', 'created_at', 'modified_at',)
+        exclude = ('id', 'token', 'created_at', 'modified_at',)
 
     # def create(self, validated_data):
     #     """
