@@ -106,6 +106,3 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 50
 }
-
-# Authentication (User) Server URl :
-USER_SERVER_URL = 'http://local.veris.in:8016/'

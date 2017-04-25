@@ -325,4 +325,4 @@ REST_FRAMEWORK = {
 # ######### END DJANGO REST FRAMEWORK CONFIGURATION
 
 # Authentication (User) Server URl :
-USER_SERVER_URL = None
+USER_SERVER_URL = get_env_setting('USER_SERVER_URL')
