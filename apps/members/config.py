@@ -22,5 +22,5 @@ MEMBER_TYPES = (
 
 DEFAULT_IMAGE_NAME = 'images/placeholder.png'
 DEFAULT_IMAGE_PATH = '{0}/{1}'.format(settings.STATIC_ROOT, DEFAULT_IMAGE_NAME)
-USER_CREATE_API = '/micro-service/user/'
+USER_CREATE_API = '/micro-service/user/shadow/'
 USER_SERVER_URL = getattr(settings, 'USER_SERVER_URL', None)
