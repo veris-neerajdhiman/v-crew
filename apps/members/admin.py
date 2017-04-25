@@ -30,9 +30,9 @@ class MemberAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'email', 'organization', 'type', )
     list_display_links = ('id', 'name', 'email', )
     list_filter = ('type', )
-    search_fields = ('name', 'email', 'organization__name', )
+    search_fields = ('name', 'email', 'organization__name', 'organization__token')
     raw_id_fields = ['organization', ]
     ordering = ('-id', )
     list_per_page = 20
 
-# admin.site.register(models.Member, MemberAdmin)
+admin.site.register(models.Member, MemberAdmin)

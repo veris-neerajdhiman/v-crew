@@ -80,6 +80,7 @@ class Organization(models.Model):
 
     # Functions
     def __str__(self):
-        return "{name}".format(
+        return "{name} <--> {token}".format(
             name=self.name,
+            token=self.token
         )
