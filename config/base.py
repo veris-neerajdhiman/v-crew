@@ -326,7 +326,7 @@ REST_FRAMEWORK = {
 
 ################ Mcro-service unique identifier ################
 # same must be used in service Vault because policies will be created w.r.t this on AM server
-ORGNIZATION_IDENTIFIER = 'organization'
+ORGANIZATION_IDENTIFIER = 'organization'
 MEMBER_IDENTIFIER = 'member'
 
 # Authentication (User) Server URl :
