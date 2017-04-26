@@ -329,5 +329,24 @@ REST_FRAMEWORK = {
 ORGANIZATION_IDENTIFIER = 'organization'
 MEMBER_IDENTIFIER = 'member'
 
+DEFAULT_ORGANIZATION_PERMISSION_SET = {
+    'create': True,
+    'update': True,
+    'delete': True,
+    'read': True
+}
+
+DEFAULT_MEMBER_PERMISSION_SET = {
+    'create': True,
+    'update': True,
+    'delete': True,
+    'read': True
+}
+
 # Authentication (User) Server URl :
 USER_SERVER_URL = get_env_setting('DATABASE_NAME_CREW')
+
+# AM SERVER API's URL's
+AM_SERVER_URL = get_env_setting('AM_SERVER_URL')
+ADD_POLICY_API_PATH = 'micro-service/am/policy/'
+VALIDATE_POLICY_API_PATH = 'micro-service/am/policy/validate/'

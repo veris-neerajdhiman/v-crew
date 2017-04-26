@@ -12,13 +12,13 @@
 from __future__ import unicode_literals
 
 # 3rd party
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 
 # Django
 
 # local
-from apps import mixins
+from apps import mixins, permissions
 
 # own app
 from apps.organization import models, serializers
@@ -32,7 +32,7 @@ class OrganizationViewSet(mixins.MultipleFieldLookupMixin, viewsets.ModelViewSet
     queryset = model.objects.all()
     serializer_class = serializers.OrganizationSerializer
     # TODO : remove AllowAny permission with proper permission class
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.ValiadteOrgnizationPermission,)
     lookup_field = 'token'
     lookup_fields = ('token', 'owner', )  # to be used in filter
 
