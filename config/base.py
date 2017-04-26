@@ -324,5 +324,10 @@ REST_FRAMEWORK = {
 }
 # ######### END DJANGO REST FRAMEWORK CONFIGURATION
 
+################ Mcro-service unique identifier ################
+# same must be used in service Vault because policies will be created w.r.t this on AM server
+ORGNIZATION_IDENTIFIER = 'organization'
+MEMBER_IDENTIFIER = 'member'
+
 # Authentication (User) Server URl :
-USER_SERVER_URL = get_env_setting('USER_SERVER_URL')
+USER_SERVER_URL = get_env_setting('DATABASE_NAME_CREW')
