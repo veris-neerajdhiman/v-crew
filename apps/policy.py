@@ -29,10 +29,15 @@ ADD_POLICY_URL = '{0}{1}'.format(getattr(settings, 'AM_SERVER_URL'),
 VALIDATE_POLICY_URL = '{0}{1}'.format(getattr(settings, 'AM_SERVER_URL'),
                                       getattr(settings, 'VALIDATE_POLICY_API_PATH'))
 
+
 def add_organization_default_policies(organization_uuid):
     """
 
     :param organization_uuid: organization uuid
+
+    Following permission will be added by default
+    Member, VRT, Widget, Process.
+
 
     SAMPLE POST Data :
         {
@@ -48,34 +53,41 @@ def add_organization_default_policies(organization_uuid):
 
     }
     """
+
+    source = '{org_identifier}:{org_uuid}:'.format(
+        org_identifier= getattr(settings, 'ORGANIZATION_IDENTIFIER'),
+        org_uuid=organization_uuid
+    )
+
     permission_set = []
 
-    # add target in permission set
-
     # organization permission set for own object
-    org_permissions = getattr(settings, 'DEFAULT_ORGANIZATION_PERMISSION_SET')
+    org_permissions_set = {
+        'target':'vrn:resource:{org_identifier}:{org_uuid}:'.format(
+            org_identifier=getattr(settings, 'ORGANIZATION_IDENTIFIER'),
+            org_uuid=organization_uuid)
+    }
 
-    # ToDo : not adding user token in resource, only validating with org object
+    org_permissions_set.update(getattr(settings, 'DEFAULT_ORGANIZATION_PERMISSION_SET'))
 
-    org_permissions.update({
-        'target': 'vrn:resource:{0}:{1}'.format(getattr(settings, 'ORGANIZATION_IDENTIFIER'),
-                                                organization_uuid)
-    })
+    # permission set for organization services
+    default_services = getattr(settings, 'DEFAULT_ORGANIZATIONS_SERVICES')
 
-    permission_set.append(org_permissions)
+    for service in default_services:
+        permissions = {
+            'target': 'vrn:resource:{org_identifier}:{org_uuid}:{service}:'.format(
+                org_identifier=getattr(settings, 'ORGANIZATION_IDENTIFIER'),
+                org_uuid=organization_uuid,
+                service=service
+            )
+        }
 
-    # organization permission set for Member service
-    member_permissions = getattr(settings, 'DEFAULT_MEMBER_PERMISSION_SET')
-
-    member_permissions.update({
-        'target': 'vrn:resource:{0}:'.format(getattr(settings, 'MEMBER_IDENTIFIER'))
-    })
-
-    permission_set.append(member_permissions)
+        permissions.update(getattr(settings, 'DEFAULT_ORGANIZATION_PERMISSION_SET'))
+        permission_set.append(permissions)
 
     data = {
-        'source': '{0}:{1}'.format(getattr(settings, 'ORGANIZATION_IDENTIFIER'), organization_uuid),
-        'source_permission_set':permission_set
+        'source': source,
+        'source_permission_set': permission_set
     }
 
     rq = requests.post(ADD_POLICY_URL, json=data, verify=True)
@@ -97,7 +109,7 @@ def check_user_policy_for_organization(user_uuid, org_uuid, action):
     data = {}
     if action == 'create':
         data = {
-            'source': 'user:{0}'.format(user_uuid),
+            'source': 'user:{0}:'.format(user_uuid),
             'resource': 'vrn:resource:organization:',
             'action': 'create'
         }

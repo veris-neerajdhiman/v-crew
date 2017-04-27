@@ -56,3 +56,4 @@ def to_pascal_case(text, split_chars='-_'):
     split_chars_regex = '[{}]'.format(split_chars)
     pascal_case = gen_pascal_case()
     return ''.join(next(pascal_case)(_) for _ in re.split(split_chars_regex, text))
+

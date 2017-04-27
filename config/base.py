@@ -328,15 +328,18 @@ REST_FRAMEWORK = {
 # same must be used in service Vault because policies will be created w.r.t this on AM server
 ORGANIZATION_IDENTIFIER = 'organization'
 MEMBER_IDENTIFIER = 'member'
+RUNTIME_IDENTIFIER = 'runtime'
+WIDGET_IDENTIFIER = 'widget'
+PROCESS_IDENTIFIER = 'process'
+
+DEFAULT_ORGANIZATIONS_SERVICES = (
+    MEMBER_IDENTIFIER,
+    RUNTIME_IDENTIFIER,
+    WIDGET_IDENTIFIER,
+    PROCESS_IDENTIFIER
+)
 
 DEFAULT_ORGANIZATION_PERMISSION_SET = {
-    'create': True,
-    'update': True,
-    'delete': True,
-    'read': True
-}
-
-DEFAULT_MEMBER_PERMISSION_SET = {
     'create': True,
     'update': True,
     'delete': True,
