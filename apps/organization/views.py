@@ -18,7 +18,7 @@ from rest_framework.response import Response
 # Django
 
 # local
-from apps import mixins, permissions
+from apps import mixins, permissions, policy, policy_reader, utils
 
 # own app
 from apps.organization import models, serializers
@@ -70,3 +70,19 @@ class OrganizationViewSet(mixins.MultipleFieldLookupMixin, viewsets.ModelViewSet
         if uuids:
             filtered_uuids = self.queryset.exclude(token__in=eval(uuids)).values_list('token', flat=True)
         return Response({'organization_uuids': filtered_uuids}, status=status.HTTP_200_OK)
+
+    def get_organization_service(self, request, owner, token):
+        """
+
+        :param request: Django request
+        :param owner: owner/user uuid
+        :param token: organization uuid
+        :return: Organization services
+        """
+        permission_set = policy.get_source_services(owner, token)
+
+        services = policy_reader.get_service_names_from_policy_permission_set(permission_set.get('source_permission_set'))
+
+        response = utils.get_permissions_from_names(services)
+
+        return Response(response, status=status.HTTP_200_OK)

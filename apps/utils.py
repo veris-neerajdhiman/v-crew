@@ -1,10 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import re
-import os
-import uuid
+import re, os, uuid, requests
 
+from django.conf import settings
 
 # noinspection PyProtectedMember
 def media_folder(instance, filename):
@@ -57,3 +56,22 @@ def to_pascal_case(text, split_chars='-_'):
     pascal_case = gen_pascal_case()
     return ''.join(next(pascal_case)(_) for _ in re.split(split_chars_regex, text))
 
+
+def get_permissions_from_names(services):
+    """
+
+    :param services: service list includes service names
+    :return: Service from service vault
+    """
+    url = '{0}{1}'.format(
+        getattr(settings, 'SERVICE_VAULT_URL'),
+        getattr(settings, 'SERVICE_LIST_PATH')
+    )
+
+    params = {
+        'names': ','.join(services)
+    }
+
+    rq = requests.get(url, params=params, verify=True)
+
+    return rq.json()

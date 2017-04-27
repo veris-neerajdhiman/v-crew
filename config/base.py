@@ -347,9 +347,16 @@ DEFAULT_ORGANIZATION_PERMISSION_SET = {
 }
 
 # Authentication (User) Server URl :
-USER_SERVER_URL = get_env_setting('DATABASE_NAME_CREW')
+USER_SERVER_URL = get_env_setting('USER_SERVER_URL')
 
 # AM SERVER API's URL's
 AM_SERVER_URL = get_env_setting('AM_SERVER_URL')
 ADD_POLICY_API_PATH = 'micro-service/am/policy/'
 VALIDATE_POLICY_API_PATH = 'micro-service/am/policy/validate/'
+GET_POLICY_API_PATH = 'micro-service/am/policy/list/'
+
+
+# Service VAULT Urls:
+SERVICE_VAULT_URL = get_env_setting('SERVICE_VAULT_URL')
+SERVICE_LIST_PATH = 'micro-service/service-vault/service/'
+

@@ -36,7 +36,7 @@ class ValiadteOrgnizationPermission(permissions.BasePermission):
         action = None
         if request.method == 'POST':
             action = 'create'
-        elif  request.method in ('GET', 'PATCH', 'DELETE'):
+        elif request.method in ('GET', 'PATCH', 'DELETE'):
             action = 'read'
         user_uuid = request.parser_context.get('kwargs').get('owner')
         org_uuid = request.parser_context.get('kwargs').get('token')

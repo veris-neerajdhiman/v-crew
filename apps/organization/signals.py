@@ -37,4 +37,4 @@ def add_default_policies_for_organization_on_am_server(sender, instance, created
     """
     if created:
         # Add Policy for Organization
-        policy.add_organization_default_policies(instance.token)
+        policy.add_organization_default_policies(instance.owner, instance.token)
