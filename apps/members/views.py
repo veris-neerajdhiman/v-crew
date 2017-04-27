@@ -12,13 +12,13 @@
 from __future__ import unicode_literals
 
 # 3rd party
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 
 # Django
 
 # local
-from apps import mixins, permissions as custom_permissions
+from apps import mixins, permissions
 
 # own app
 from apps.members import models, serializers
@@ -31,10 +31,9 @@ class MemberViewSet(mixins.MultipleFieldLookupMixin, viewsets.ModelViewSet):
     model = models.Member
     queryset = model.objects.all()
     serializer_class = serializers.MemberSerializer
-    # TODO : remove AllowAny permission with proper permission class
-    permission_classes = (permissions.AllowAny, custom_permissions.IsUserOrganizationOwner)
-
-    lookup_fields = ('pk', 'organization', )  # to be used in filter
+    permission_classes = (permissions.ValidateMemberPermission, permissions.IsUserOrganizationOwner)
+    lookup_field = 'uuid'
+    lookup_fields = ('uuid', 'organization', )  # to be used in filter
 
     def get_serializer_class(self):
         """For POST method we will use different Serializer

@@ -30,7 +30,7 @@ class MemberSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = models.Member
-        exclude = ('created_at', 'modified_at', )
+        exclude = ('id', 'created_at', 'modified_at', )
         read_only_fields = ('id', 'email', )
 
 
@@ -39,13 +39,14 @@ class MemberAddSerializer(serializers.ModelSerializer):
 
     """
     email = serializers.EmailField(required=False,)
+    uuid = serializers.UUIDField(read_only=True)
     user = serializers.UUIDField(required=False)  # to be added later when we willa dd shadow user
     type = serializers.ChoiceField(required=True,
                                    choices=config.MEMBER_TYPES)
 
     class Meta:
         model = models.Member
-        exclude = ('created_at', 'modified_at', )
+        exclude = ('id', 'created_at', 'modified_at', )
         validators = [
            UniqueTogetherValidator(
                 queryset=models.Member.objects.all(),

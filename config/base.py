@@ -346,6 +346,13 @@ DEFAULT_ORGANIZATION_PERMISSION_SET = {
     'read': True
 }
 
+DEFAULT_MEMBER_PERMISSION_SET = {
+    'create': True,
+    'update': True,
+    'delete': True,
+    'read': True
+}
+
 # Authentication (User) Server URl :
 USER_SERVER_URL = get_env_setting('USER_SERVER_URL')
 

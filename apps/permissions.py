@@ -24,7 +24,7 @@ class CustomForbidden(exceptions.APIException):
     default_detail = "You are not authorized to perform this action."
 
 
-class ValiadteOrgnizationPermission(permissions.BasePermission):
+class ValidateOrgnizationPermission(permissions.BasePermission):
     """
 
     """
@@ -42,6 +42,29 @@ class ValiadteOrgnizationPermission(permissions.BasePermission):
         org_uuid = request.parser_context.get('kwargs').get('token')
 
         if not policy.check_user_policy_for_organization(user_uuid, org_uuid, action):
+            raise CustomForbidden
+        return True
+
+
+class ValidateMemberPermission(permissions.BasePermission):
+    """
+
+    """
+
+    def has_permission(self, request, view):
+        """
+
+        """
+        action = None
+        if request.method == 'POST':
+            action = 'create'
+        elif request.method in ('GET', 'PATCH', 'DELETE'):
+            action = 'read'
+        user_uuid = request.parser_context.get('kwargs').get('owner')
+        org_uuid = request.parser_context.get('kwargs').get('organization')
+        member_uuid = request.parser_context.get('kwargs').get('uuid')
+
+        if not policy.check_user_policy_for_member(user_uuid, org_uuid, member_uuid, action):
             raise CustomForbidden
         return True
 

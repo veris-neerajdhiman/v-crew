@@ -12,7 +12,7 @@
 from __future__ import unicode_literals
 
 # 3rd party
-
+import uuid
 
 # Django
 from django.db import models
@@ -31,6 +31,13 @@ class Member(models.Model):
 
     """
     # attributes
+    uuid = models.UUIDField(
+        _('Member Unique Identifier'),
+        default=uuid.uuid4,
+        unique=True,
+        editable=False,
+        help_text=_('Member uuid, this token will uniquely identify Member.'),
+    )
     name = models.CharField(
         _('Member Name'),
         null=False,

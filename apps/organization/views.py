@@ -31,8 +31,7 @@ class OrganizationViewSet(mixins.MultipleFieldLookupMixin, viewsets.ModelViewSet
     model = models.Organization
     queryset = model.objects.all()
     serializer_class = serializers.OrganizationSerializer
-    # TODO : remove AllowAny permission with proper permission class
-    permission_classes = (permissions.ValiadteOrgnizationPermission,)
+    permission_classes = (permissions.ValidateOrgnizationPermission,)
     lookup_field = 'token'
     lookup_fields = ('token', 'owner', )  # to be used in filter
 
