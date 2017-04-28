@@ -12,6 +12,7 @@
 from __future__ import unicode_literals
 
 # 3rd party
+import copy
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
@@ -43,7 +44,7 @@ class OrganizationViewSet(mixins.MultipleFieldLookupMixin, viewsets.ModelViewSet
         :return: Just created Organization
         """
 
-        post_data = request.data
+        post_data = copy.deepcopy(request.data)
 
         # ToDo: Right Now we are using owner uuid directly but later on we have validate this user Permissions
         # ToDo: only then we will add this uuid in owner
