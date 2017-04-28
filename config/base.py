@@ -326,11 +326,11 @@ REST_FRAMEWORK = {
 
 ################ Mcro-service unique identifier ################
 # same must be used in service Vault because policies will be created w.r.t this on AM server
-ORGANIZATION_IDENTIFIER = 'organization'
-MEMBER_IDENTIFIER = 'member'
-RUNTIME_IDENTIFIER = 'runtime'
-WIDGET_IDENTIFIER = 'widget'
-PROCESS_IDENTIFIER = 'process'
+ORGANIZATION_IDENTIFIER = get_env_setting('ORGANIZATION_IDENTIFIER')
+MEMBER_IDENTIFIER = get_env_setting('MEMBER_IDENTIFIER')
+RUNTIME_IDENTIFIER = get_env_setting('VRT_IDENTIFIER')
+WIDGET_IDENTIFIER = get_env_setting('WIDGET_IDENTIFIER')
+PROCESS_IDENTIFIER = get_env_setting('PROCESS_IDENTIFIER')
 
 DEFAULT_ORGANIZATIONS_SERVICES = (
     MEMBER_IDENTIFIER,
