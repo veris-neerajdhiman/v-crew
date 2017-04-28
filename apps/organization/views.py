@@ -57,20 +57,6 @@ class OrganizationViewSet(mixins.MultipleFieldLookupMixin, viewsets.ModelViewSet
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def organization_uuid_list(self, request):
-        """
-
-        :return: organization uuid list
-        """
-        # ToDo: Restrict this API for internal Use Only
-
-        # filter for uuid sent in query_param if any
-        filtered_uuids = []
-        uuids = self.request.query_params.get('uuids', [])
-        if uuids:
-            filtered_uuids = self.queryset.exclude(token__in=eval(uuids)).values_list('token', flat=True)
-        return Response({'organization_uuids': filtered_uuids}, status=status.HTTP_200_OK)
-
     def get_organization_service(self, request, owner, token):
         """
 

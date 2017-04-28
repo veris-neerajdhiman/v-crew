@@ -38,16 +38,7 @@ organization_service_list = views.OrganizationViewSet.as_view({
 })
 
 
-
-#
-# organization_uuid_list = views.OrganizationViewSet.as_view({
-#     'get': 'organization_uuid_list',
-# })
-
 urlpatterns = [
-    # url(r'^organization/uuids/$',
-    #     organization_uuid_list,
-    #     name='organization-list'),
     url(r'^user/(?P<owner>{uuid})/organization/$'.format(uuid=UUID_REGEX),
         organization_list,
         name='organization-list'),
