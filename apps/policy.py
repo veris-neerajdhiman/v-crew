@@ -174,11 +174,21 @@ def check_user_policy_for_organization(user_uuid, org_uuid, action):
             'action': 'create'
         }
     elif action in ('read', 'update', 'delete'):
-        data = {
-            'source': 'user:{0}:organization:{1}:'.format(user_uuid, org_uuid),
-            'resource': 'vrn:resource:user:{0}:organization:{1}:'.format(user_uuid, org_uuid),
-            'action': action
-        }
+        # for list all organizations of particular user object
+        if action == 'read' and org_uuid is None:
+            # check users all organizations perm
+            data = {
+                'source': 'user:{0}:'.format(user_uuid),
+                'resource': 'vrn:resource:organization:',
+                'action': 'read'
+            }
+        else:
+            # check user particular organization perm
+            data = {
+                'source': 'user:{0}:organization:{1}:'.format(user_uuid, org_uuid),
+                'resource': 'vrn:resource:user:{0}:organization:{1}:'.format(user_uuid, org_uuid),
+                'action': action
+            }
 
     rq = requests.post(VALIDATE_POLICY_URL, json=data, verify=True).json()
 
@@ -208,7 +218,7 @@ def check_user_policy_for_member(user_uuid, org_uuid, member_uuid, action):
             data = {
                 'source': 'user:{0}:organization:{1}:'.format(user_uuid, org_uuid),
                 'resource': 'vrn:resource:user:{0}:organization:{1}:member:'.format(user_uuid, org_uuid),
-                'action': action
+                'action': 'read'
             }
         else:
             data = {
