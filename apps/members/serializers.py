@@ -19,6 +19,7 @@ from rest_framework.exceptions import NotAcceptable
 # Django
 
 # local
+from apps.organization.serializers import OrganizationSerializer
 
 # own app
 from apps.members import models, config
@@ -98,3 +99,14 @@ class MemberAddSerializer(serializers.ModelSerializer):
         })
 
         return super(MemberAddSerializer, self).create(validated_data)
+
+
+class MemberShipSerializer(serializers.ModelSerializer):
+    """
+
+    """
+    organization = OrganizationSerializer()
+
+    class Meta:
+        model = models.Member
+        fields = ('uuid', 'name', 'user', 'organization')

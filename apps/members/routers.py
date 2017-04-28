@@ -32,6 +32,10 @@ members_detail = views.MemberViewSet.as_view({
     'delete': 'destroy'
 })
 
+member_organization_list = views.MemberShipViewSet.as_view({
+    'get': 'list',
+})
+
 
 urlpatterns = [
     url(r'^user/(?P<owner>{uuid})/organization/(?P<organization>{uuid})/member/$'.format(uuid=UUID_REGEX),
@@ -40,4 +44,7 @@ urlpatterns = [
     url(r'^user/(?P<owner>{uuid})/organization/(?P<organization>{uuid})/member/(?P<uuid>{uuid})/$'.format(uuid=UUID_REGEX),
         members_detail,
         name='members-detail'),
+    url(r'^member/(?P<member_user_uuid>{uuid})/organization/$'.format(uuid=UUID_REGEX),
+        member_organization_list,
+        name='members-organizations'),
 ]

@@ -65,3 +65,20 @@ class MemberViewSet(mixins.MultipleFieldLookupMixin, viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class MemberShipViewSet(viewsets.ModelViewSet):
+    """This viewset will be used to list user memberships.
+
+    """
+    model = models.Member
+    queryset = model.objects.all()
+    serializer_class = serializers.MemberShipSerializer
+    permission_classes = (permissions.ValidateMemberPermission, )
+
+    def get_queryset(self):
+        """
+
+        """
+        queryset = super(MemberShipViewSet, self).get_queryset()
+        return queryset.filter(user=self.kwargs.get('member_user_uuid'))

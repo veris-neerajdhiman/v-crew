@@ -61,6 +61,10 @@ class ValidateMemberPermission(permissions.BasePermission):
         elif request.method in ('GET', 'PATCH', 'DELETE'):
             action = 'read'
         user_uuid = request.parser_context.get('kwargs').get('owner')
+
+        # exceptional case when member is trying to access his memberships but as user (logged in  from app)
+        if user_uuid is None:
+            user_uuid = request.parser_context.get('kwargs').get('member_user_uuid')
         org_uuid = request.parser_context.get('kwargs').get('organization')
         member_uuid = request.parser_context.get('kwargs').get('uuid')
 

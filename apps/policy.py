@@ -213,13 +213,21 @@ def check_user_policy_for_member(user_uuid, org_uuid, member_uuid, action):
             'action': 'create'
         }
     elif action in ('read', 'update', 'delete'):
-        # for list all members not particular member object
-        if action == 'read' and member_uuid is None:
+        # list members Organizations (memberships)
+        if action == 'read' and member_uuid is None and org_uuid is None:
+            data = {
+                'source': 'user:{0}:'.format(user_uuid),
+                'resource': 'vrn:resource:organization:',
+                'action': 'read'
+            }
+        # for list all members of organization not particular member object
+        elif action == 'read' and member_uuid is None:
             data = {
                 'source': 'user:{0}:organization:{1}:'.format(user_uuid, org_uuid),
                 'resource': 'vrn:resource:user:{0}:organization:{1}:member:'.format(user_uuid, org_uuid),
                 'action': 'read'
             }
+
         else:
             data = {
                 'source': 'user:{0}:organization:{1}:member:{2}:'.format(user_uuid, org_uuid, member_uuid),
@@ -230,6 +238,7 @@ def check_user_policy_for_member(user_uuid, org_uuid, member_uuid, action):
     rq = requests.post(VALIDATE_POLICY_URL, json=data, verify=True).json()
 
     return rq.get('allowed')
+
 
 def get_source_services(user_uuid, org_uuid):
     """
