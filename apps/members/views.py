@@ -40,8 +40,9 @@ class MemberViewSet(mixins.MultipleFieldLookupMixin, viewsets.ModelViewSet):
 
         :return: Serializer Class
         """
-        if self.request.method == 'POST':
-            return serializers.MemberAddSerializer
+        if self.request:
+            if self.request.method == 'POST':
+                return serializers.MemberAddSerializer
         return self.serializer_class
 
     def create(self, request, owner, organization):
