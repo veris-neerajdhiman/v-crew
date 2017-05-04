@@ -323,6 +323,12 @@ REST_FRAMEWORK = {
 }
 # ######### END DJANGO REST FRAMEWORK CONFIGURATION
 
+
+API_TITLE = 'Organization-Member Micro-service API'
+APP_NAMESPACE = 'apps_urls'
+
+
+
 ################ Mcro-service unique identifier ################
 # same must be used in service Vault because policies will be created w.r.t this on AM server
 ORGANIZATION_IDENTIFIER = get_env_setting('ORGANIZATION_IDENTIFIER')

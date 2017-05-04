@@ -27,7 +27,7 @@ from rest_framework.decorators import api_view, renderer_classes
 from rest_framework import response, schemas
 
 
-API_TITLE = 'Organization-Member Micro-service API'
+API_TITLE = settings.API_TITLE
 
 
 @api_view()
@@ -44,7 +44,7 @@ urlpatterns = [
     url(r'^auth/', include('rest_framework.urls', namespace='rest_framework')),
     # url(r'^docs/', include_docs_urls(title=API_TITLE, description='')),
 
-    url(r'^micro-service/', include('apps.urls', namespace='apps_urls')),
+    url(r'^micro-service/', include('apps.urls', namespace=settings.APP_NAMESPACE)),
 
 ]
 

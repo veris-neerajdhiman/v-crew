@@ -26,6 +26,6 @@ from apps.members import routers as member_router
 
 
 urlpatterns = [
-    url(r'', include(org_router)),
-    url(r'', include(member_router)),
+    url(r'', include(org_router, namespace='organization-urls')),
+    url(r'', include(member_router, namespace='member-urls')),
 ]

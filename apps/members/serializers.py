@@ -16,7 +16,9 @@ import requests
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from rest_framework.exceptions import NotAcceptable
+
 # Django
+from django.conf import settings
 
 # local
 from apps.organization.serializers import OrganizationSerializer
@@ -29,16 +31,41 @@ class MemberSerializer(serializers.ModelSerializer):
     """This Serializer is used when we qil retrieve, update a Member.
 
     """
+    url = serializers.SerializerMethodField()
+
     class Meta:
         model = models.Member
-        exclude = ('id', 'created_at', 'modified_at', )
+        fields = ('url', 'uuid', 'name', 'email', 'user', 'type', 'organization')
         read_only_fields = ('id', 'email', )
+
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(MemberSerializer, self).__init__(*args, **kwargs)
+
+    def get_url(self, obj):
+        """
+
+        :param obj:
+        :return:
+        """
+        from django.urls import reverse
+
+        # import ipdb;ipdb.set_trace()
+        url_name = '{app_namespace}:member-urls:members-detail'.format(app_namespace=getattr(settings, 'APP_NAMESPACE'))
+
+        owner = self.request.parser_context.get('kwargs').get('owner')
+        organization = self.request.parser_context.get('kwargs').get('organization')
+
+        return self.request.build_absolute_uri(reverse(url_name,
+                                                       args=(owner, organization, obj.uuid)))
 
 
 class MemberAddSerializer(serializers.ModelSerializer):
     """This Serializer is used when we are adding a Member.
 
     """
+    url = serializers.SerializerMethodField()
     email = serializers.EmailField(required=False,)
     uuid = serializers.UUIDField(read_only=True)
     user = serializers.UUIDField(required=False)  # to be added later when we willa dd shadow user
@@ -54,6 +81,27 @@ class MemberAddSerializer(serializers.ModelSerializer):
                 fields=('email', 'organization', )
            )
         ]
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(MemberAddSerializer, self).__init__(*args, **kwargs)
+
+    def get_url(self, obj):
+        """
+
+        :param obj:
+        :return:
+        """
+        from django.urls import reverse
+
+        # import ipdb;ipdb.set_trace()
+        url_name = '{app_namespace}:member-urls:members-detail'.format(app_namespace=getattr(settings, 'APP_NAMESPACE'))
+
+        owner = self.request.parser_context.get('kwargs').get('owner')
+        organization = self.request.parser_context.get('kwargs').get('organization')
+
+        return self.request.build_absolute_uri(reverse(url_name,
+                                                       args=(owner, organization, obj.uuid)))
 
     def _get_user_api(self):
         """

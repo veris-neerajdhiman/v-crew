@@ -45,6 +45,11 @@ class MemberViewSet(mixins.MultipleFieldLookupMixin, viewsets.ModelViewSet):
                 return serializers.MemberAddSerializer
         return self.serializer_class
 
+    def get_serializer(self, *args, **kwargs):
+
+        serializer_class = self.get_serializer_class()
+        return serializer_class(*args, **kwargs, request=self.request)
+
     def create(self, request, owner, organization):
         """
 
