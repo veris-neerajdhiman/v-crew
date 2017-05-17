@@ -126,8 +126,13 @@ class MemberAddSerializer(serializers.ModelSerializer):
         url = self._get_user_api()
         image = open(self._get_default_image(), 'rb')
 
+        data = {
+            'email': email,
+            'is_active': False
+        }
+
         # ToDo : Not checking for any error in below API
-        return requests.post(url, files={'avatar': image}, data={'email': email}).json()
+        return requests.post(url, files={'avatar': image}, data=data).json()
 
     def create(self, validated_data):
         """
