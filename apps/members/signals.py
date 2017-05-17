@@ -25,7 +25,7 @@ from apps.members.models import Member
 
 
 @receiver(post_save, sender=Member)
-def add_default_policies_for_organization_on_am_server(sender, instance, created=False, **kwargs):
+def add_default_policies_for_member_on_am_server(sender, instance, created=False, **kwargs):
     """Here default services for Member will be enabled by adding policies on AM server
 
     :param sender: Signal sender
