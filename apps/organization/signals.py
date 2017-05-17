@@ -63,7 +63,7 @@ def add_organization_owner_as_orgnization_member(sender, instance, created=False
         response = requests.get(url).json()
 
         data = {
-            'name': response.get('name'),
+            'name': response.get('name') if response.get('name') is not None else '',
             'email': response.get('email'),
             'organization': instance,
             'user': instance.owner,
