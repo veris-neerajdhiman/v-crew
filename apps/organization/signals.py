@@ -41,7 +41,8 @@ def add_default_policies_for_organization_on_am_server(sender, instance, created
         policy.add_organization_default_policies(instance.owner, instance.token)
 
 
-@receiver(post_save, sender=Organization)
+# @receiver(post_save, sender=Organization)
+
 def add_organization_owner_as_orgnization_member(sender, instance, created=False, **kwargs):
     """Here Organization owner will be added as Organization member too , so That we can assign him default RunTimes
 
