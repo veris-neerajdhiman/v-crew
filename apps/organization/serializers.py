@@ -33,4 +33,4 @@ class OrganizationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Organization
-        exclude = ('id', 'token', 'created_at', 'modified_at',)
+        exclude = ('id', 'token', )

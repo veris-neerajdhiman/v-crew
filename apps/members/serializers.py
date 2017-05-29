@@ -35,7 +35,7 @@ class MemberSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Member
-        fields = ('url', 'uuid', 'name', 'email', 'user', 'type', 'organization')
+        fields = ('url', 'uuid', 'name', 'email', 'user', 'type', 'organization', 'created_at', 'modified_at', )
         read_only_fields = ('id', 'email', )
 
 
@@ -74,7 +74,7 @@ class MemberAddSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Member
-        exclude = ('id', 'created_at', 'modified_at', )
+        exclude = ('id', )
         validators = [
            UniqueTogetherValidator(
                 queryset=models.Member.objects.all(),
@@ -162,4 +162,4 @@ class MemberShipSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Member
-        fields = ('uuid', 'name', 'user', 'organization')
+        fields = ('uuid', 'name', 'user', 'organization', 'created_at', 'modified_at', )
