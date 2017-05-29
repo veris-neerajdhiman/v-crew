@@ -57,6 +57,29 @@ class OrganizationViewSet(mixins.MultipleFieldLookupMixin, viewsets.ModelViewSet
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    def list(self, request, owner):
+        """
+
+        :param request: Django request
+        :param owner: owner/user uuid
+        :return: User Organization List (Both in which he is member and owner)
+        """
+
+        # Here we have to list All organization in which a user is either owner or member
+        # We already have qs(1) of Organizations in which User is owner.
+        # for Organization in which user is member we can match `owner` uuid in `user` field of Member model and can
+        # get Organization list qs()2 and then merge two qs(1) & qs(2) to get entire list of Organizations.
+
+        owner_organization_qs = self.get_queryset()
+        member_organization_qs = models.UserOrganization.objects.get_member_organization_queryset(user_uuid=owner)
+
+        response = {
+            'as_owner': self.get_serializer(owner_organization_qs, many=True).data,
+            'as_member': self.get_serializer(member_organization_qs, many=True).data
+        }
+
+        return Response(response, status=status.HTTP_200_OK)
+
     def get_organization_service(self, request, owner, token):
         """
 

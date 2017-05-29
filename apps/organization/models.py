@@ -26,6 +26,7 @@ from django.utils.translation import ugettext_lazy as _
 from apps.utils import media_folder
 
 # own app
+from apps.organization import managers
 
 
 class Organization(models.Model):
@@ -84,3 +85,13 @@ class Organization(models.Model):
             name=self.name,
             token=self.token
         )
+
+
+class UserOrganization(Organization):
+    """
+    Returns Organization in which User is added as Member
+    """
+    objects = managers.UserOrganizationManager()
+
+    class Meta:
+        proxy = True
