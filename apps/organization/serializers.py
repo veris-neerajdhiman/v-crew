@@ -28,6 +28,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
 
     """
     uuid = serializers.CharField(source='token', read_only=True)
+    avatar = serializers.ImageField(required=False)
     avatar_thumbnail = serializers.ImageField(read_only=True)
 
     class Meta:
