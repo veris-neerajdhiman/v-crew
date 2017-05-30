@@ -57,6 +57,14 @@ class OrganizationViewSet(mixins.MultipleFieldLookupMixin, viewsets.ModelViewSet
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    def get_serializer(self, *args, **kwargs):
+
+        serializer_class = self.get_serializer_class()
+        kwargs.update({
+            'request': self.request,
+        })
+        return serializer_class(*args, **kwargs)
+
     def list(self, request, owner):
         """
 

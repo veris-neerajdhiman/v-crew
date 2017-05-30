@@ -38,7 +38,6 @@ class MemberSerializer(serializers.ModelSerializer):
         fields = ('url', 'uuid', 'name', 'email', 'user', 'type', 'organization', 'created_at', 'modified_at', )
         read_only_fields = ('id', 'email', )
 
-
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(MemberSerializer, self).__init__(*args, **kwargs)
@@ -51,7 +50,6 @@ class MemberSerializer(serializers.ModelSerializer):
         """
         from django.urls import reverse
 
-        # import ipdb;ipdb.set_trace()
         url_name = '{app_namespace}:member-urls:members-detail'.format(app_namespace=getattr(settings, 'APP_NAMESPACE'))
 
         owner = self.request.parser_context.get('kwargs').get('owner')
