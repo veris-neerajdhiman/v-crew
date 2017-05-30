@@ -156,8 +156,21 @@ class MemberShipSerializer(serializers.ModelSerializer):
     """
 
     """
-    organization = OrganizationSerializer()
+    organization = serializers.SerializerMethodField()
+
 
     class Meta:
         model = models.Member
         fields = ('uuid', 'name', 'user', 'organization', 'created_at', 'modified_at', )
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(MemberShipSerializer, self).__init__(*args, **kwargs)
+
+    def get_organization(self, obj):
+        """
+
+        :param obj: member Object
+        :return: organization data
+        """
+        return OrganizationSerializer(obj.organization, request=self.request).data

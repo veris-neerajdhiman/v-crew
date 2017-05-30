@@ -92,3 +92,11 @@ class MemberShipViewSet(viewsets.ModelViewSet):
         """
         queryset = super(MemberShipViewSet, self).get_queryset()
         return queryset.filter(user=self.kwargs.get('member_user_uuid'))
+
+    def get_serializer(self, *args, **kwargs):
+
+        serializer_class = self.get_serializer_class()
+        kwargs.update({
+            'request': self.request,
+        })
+        return serializer_class(*args, **kwargs)

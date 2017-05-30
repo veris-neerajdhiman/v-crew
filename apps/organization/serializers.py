@@ -45,14 +45,14 @@ class OrganizationSerializer(serializers.HyperlinkedModelSerializer):
     def get_url(self, obj):
         """
 
-        :param obj:
+        :param obj: Organization object
         :return: absolute url of Organization
         """
         from django.urls import reverse
 
         url_name = '{app_namespace}:organization-urls:organization-detail'.format(app_namespace=getattr(settings, 'APP_NAMESPACE'))
 
-        owner = self.request.parser_context.get('kwargs').get('owner')
+        owner = obj.owner
 
         return self.request.build_absolute_uri(reverse(url_name,
                                                        args=(owner, str(obj.token), )
