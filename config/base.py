@@ -137,7 +137,7 @@ MEDIA_URL = '/media/'
 
 # ######### STATIC FILE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-STATIC_ROOT = normpath(join(SITE_ROOT, 'static'))
+STATIC_ROOT = normpath(join('/tmp', 'static'))
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
 STATIC_URL = '/static/'
@@ -153,13 +153,6 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
 )
 # ######### END STATIC FILE CONFIGURATION
-
-
-# ######### SECRET CONFIGURATION
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-# Note: This key should only be used for development and testing.
-SECRET_KEY = r"ugdn_k*$*g3b_g3x$hf4mxm#l$h*si9&u-@5aokaumjz=#x5g7"
-# ######### END SECRET CONFIGURATION
 
 
 # ######### SITE CONFIGURATION
