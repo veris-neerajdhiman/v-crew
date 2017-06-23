@@ -24,7 +24,7 @@ from apps.organization import models
 
 
 class OrganizationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'token', 'name', 'avatar_thumbnail', 'owner', 'created_at', 'modified_at', )
+    list_display = ('id', 'token', 'name', 'avatar', 'owner', 'created_at', 'modified_at', )
     list_display_links = ('id', 'name', )
     search_fields = ('name', )
     list_per_page = 20
@@ -36,8 +36,8 @@ class OrganizationAdmin(admin.ModelAdmin):
         :param obj: Organization instance
         :return: user avatar thumbanil
         """
-        return '<img width="36" height="36" src="%s"/>' % obj.avatar_thumbnail.url if bool(obj.avatar_thumbnail) else ''
+        return '<img width="36" height="36" src="%s"/>' % obj.avatar if bool(obj.avatar) else ''
 
-    avatar_thumbnail.allow_tags = True
+        avatar.allow_tags = True
 
 admin.site.register(models.Organization, OrganizationAdmin)

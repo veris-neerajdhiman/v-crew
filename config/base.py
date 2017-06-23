@@ -56,8 +56,9 @@ DEBUG = False
 
 # ######### TEST RUNNER CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/releases/dev/#new-test-runner
-TEST_RUNNER = 'django.test.runner.DiscoverRunner'
-# ######### END TEST RUNNER CONFIGURATION
+# TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+NOSE_ARGS = ['--with-spec', '--spec-color', '--verbosity=1', ]
 
 
 # ######### MANAGER CONFIGURATION
@@ -137,7 +138,7 @@ MEDIA_URL = '/media/'
 
 # ######### STATIC FILE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-STATIC_ROOT = normpath(join(SITE_ROOT, 'static'))
+STATIC_ROOT = normpath(join('/tmp', 'static'))
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
 STATIC_URL = '/static/'
@@ -153,13 +154,6 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
 )
 # ######### END STATIC FILE CONFIGURATION
-
-
-# ######### SECRET CONFIGURATION
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-# Note: This key should only be used for development and testing.
-SECRET_KEY = r"ugdn_k*$*g3b_g3x$hf4mxm#l$h*si9&u-@5aokaumjz=#x5g7"
-# ######### END SECRET CONFIGURATION
 
 
 # ######### SITE CONFIGURATION
@@ -325,7 +319,7 @@ REST_FRAMEWORK = {
 
 
 API_TITLE = 'Organization-Member Micro-service API'
-APP_NAMESPACE = 'apps_urls'
+APP_NAMESPACE = 'apps'
 
 
 

@@ -47,16 +47,19 @@ class Organization(models.Model):
         max_length=64,
         help_text=_('Required. 64 characters or fewer.')
     )
-    avatar = models.ImageField(
+    avatar = models.URLField(
         _('Organization Logo'),
-        upload_to=media_folder
     )
-    avatar_thumbnail = ImageSpecField(
-        source='avatar',
-        processors=[ResizeToFill(100, 100)],
-        format='JPEG',
-        options={'quality': 60}
-    )
+    # avatar = models.ImageField(
+    #     _('Organization Logo'),
+    #     upload_to=media_folder
+    # )
+    # avatar_thumbnail = ImageSpecField(
+    #     source='avatar',
+    #     processors=[ResizeToFill(100, 100)],
+    #     format='JPEG',
+    #     options={'quality': 60}
+    # )
     owner = models.UUIDField(
         _('Owner Unique Identifier'),
         help_text=_('User uuid, this token will identify who is the owner of respective Organization.'),

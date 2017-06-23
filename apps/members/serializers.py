@@ -122,15 +122,15 @@ class MemberAddSerializer(serializers.ModelSerializer):
             - First we will check wether user with same email if not only then we will create shadow user.
         """
         url = self._get_user_api()
-        image = open(self._get_default_image(), 'rb')
-
+        # image = open(self._get_default_image(), 'rb')
         data = {
             'email': email,
             'is_active': False
         }
 
         # ToDo : Not checking for any error in below API
-        return requests.post(url, files={'avatar': image}, data=data).json()
+        # return requests.post(url, files={'avatar': image}, data=data).json()
+        return requests.post(url, data=data).json()
 
     def create(self, validated_data):
         """

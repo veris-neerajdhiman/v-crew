@@ -31,8 +31,10 @@ class OrganizationSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.SerializerMethodField()
     uuid = serializers.CharField(source='token',
                                  read_only=True)
-    avatar = serializers.ImageField(required=False)
-    avatar_thumbnail = serializers.ImageField(read_only=True)
+    avatar = serializers.URLField(required=False)
+
+    # avatar = serializers.ImageField(required=False)
+    # avatar_thumbnail = serializers.ImageField(read_only=True)
 
     class Meta:
         model = models.Organization
