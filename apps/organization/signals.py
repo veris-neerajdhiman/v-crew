@@ -39,36 +39,3 @@ def add_default_policies_for_organization_on_am_server(sender, instance, created
     if created:
         # Add Policy for Organization
         policy.add_organization_default_policies(instance.owner, instance.token)
-
-
-@receiver(post_save, sender=Organization)
-def add_organization_owner_as_orgnization_member(sender, instance, created=False, **kwargs):
-    """Here Organization owner will be added as Organization member too , so That we can assign him default RunTimes
-
-    :param sender: Signal sender
-    :param instance: Organization instance
-    :param created: If new obj is created or updated
-    :param kwargs: Signal kwargs
-    """
-    # ToDo : Must be handled by System Workflow, this is a Temporary solution
-
-    if created:
-
-        # get user details
-        user_get_api = 'micro-service/user/{user_uuid}/'.format(user_uuid=instance.owner)
-        user_server_url = getattr(settings, 'USER_SERVER_URL', None)
-
-        url = '{0}{1}'.format(user_server_url, user_get_api)
-
-        response = requests.get(url).json()
-
-        data = {
-            'name': response.get('name') if response.get('name') is not None else '',
-            'email': response.get('email'),
-            'organization': instance,
-            'user': instance.owner,
-            'type': 'user',
-        }
-
-        # add as Member
-        Member.objects.create(**data)
