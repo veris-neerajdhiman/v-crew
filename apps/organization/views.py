@@ -13,13 +13,13 @@ from __future__ import unicode_literals
 
 # 3rd party
 import copy
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
 
 # Django
 
 # local
-from apps import mixins, permissions, policy, policy_reader, utils
+from apps import mixins, utils
 
 # own app
 from apps.organization import models, serializers
@@ -32,40 +32,27 @@ class OrganizationViewSet(mixins.MultipleFieldLookupMixin, viewsets.ModelViewSet
     model = models.Organization
     queryset = model.objects.all()
     serializer_class = serializers.OrganizationSerializer
-    permission_classes = (permissions.ValidateOrgnizationPermission,)
+    permission_classes = (permissions.IsAuthenticated, )
     lookup_field = 'token'
-    lookup_fields = ('token', 'owner', )  # to be used in filter
+    lookup_fields = ('token', )  # to be used in filter
 
-    def create(self, request, owner):
+    def get_serializer_context(self):
         """
-
-        :param request: Django request
-        :param owner: owner/user uuid
-        :return: Just created Organization
+         Extra context provided to the serializer class.
         """
+        return {
+            'request': self.request,  # request object is passed here
+            }
 
-        post_data = copy.deepcopy(request.data)
+    def get_queryset(self, *args, **kwargs):
+        """
+        """
+        queryset = super(OrganizationViewSet, self).get_queryset(*args, **kwargs)
+        queryset = queryset.filter(user=self.request.user)
 
-        # ToDo: Right Now we are using owner uuid directly but later on we have validate this user Permissions
-        # ToDo: only then we will add this uuid in owner
-        post_data.update({
-            'owner': owner
-        })
+        return queryset
 
-        serializer = self.get_serializer(data=post_data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def get_serializer(self, *args, **kwargs):
-
-        serializer_class = self.get_serializer_class()
-        kwargs.update({
-            'request': self.request,
-        })
-        return serializer_class(*args, **kwargs)
-
-    def list(self, request, owner):
+    def list(self, request):
         """
 
         :param request: Django request
@@ -79,27 +66,12 @@ class OrganizationViewSet(mixins.MultipleFieldLookupMixin, viewsets.ModelViewSet
         # get Organization list qs()2 and then merge two qs(1) & qs(2) to get entire list of Organizations.
 
         owner_organization_qs = self.get_queryset()
-        member_organization_qs = models.UserOrganization.objects.get_member_organization_queryset(user_uuid=owner)
+        member_organization_qs = models.UserOrganization.objects.\
+            get_member_organization_queryset(username=request.user.username)
 
         response = {
             'as_owner': self.get_serializer(owner_organization_qs, many=True).data,
             'as_member': self.get_serializer(member_organization_qs, many=True).data
         }
-
-        return Response(response, status=status.HTTP_200_OK)
-
-    def get_organization_service(self, request, owner, token):
-        """
-
-        :param request: Django request
-        :param owner: owner/user uuid
-        :param token: organization uuid
-        :return: Organization services
-        """
-        permission_set = policy.get_source_services(owner, token)
-
-        services = policy_reader.get_service_names_from_policy_permission_set(permission_set.get('source_permission_set'))
-
-        response = utils.get_permissions_from_names(services)
 
         return Response(response, status=status.HTTP_200_OK)

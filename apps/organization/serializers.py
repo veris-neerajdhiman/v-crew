@@ -38,7 +38,7 @@ class OrganizationSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = models.Organization
-        exclude = ('token', )
+        exclude = ('token', 'user', )
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
@@ -51,11 +51,25 @@ class OrganizationSerializer(serializers.HyperlinkedModelSerializer):
         :return: absolute url of Organization
         """
         from django.urls import reverse
+        request = self.context.get('request')
 
-        url_name = '{app_namespace}:organization-urls:organization-detail'.format(app_namespace=getattr(settings, 'APP_NAMESPACE'))
+        url_name = '{app_namespace}:organization-urls:organization-detail'.\
+            format(app_namespace=getattr(settings, 'APP_NAMESPACE'))
 
-        owner = obj.owner
+        return request.build_absolute_uri(
+            reverse(url_name, args=(str(obj.token), ))
+        )
 
-        return self.request.build_absolute_uri(reverse(url_name,
-                                                       args=(owner, str(obj.token), )
-                                                       ))
+    def create(self, validated_data):
+        """
+
+        :param validated_data: Validated data
+        :return: Organization obj
+        """
+        user = self.context.get('request').user
+
+        validated_data.update({
+            'user': user
+        })
+
+        return models.Organization.objects.create(**validated_data)

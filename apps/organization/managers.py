@@ -25,6 +25,6 @@ class UserOrganizationManager(models.Manager):
     """
 
     """
-    def get_member_organization_queryset(self, user_uuid):
+    def get_member_organization_queryset(self, username):
         return super(UserOrganizationManager, self).get_queryset().filter(
-            organization_members__user=user_uuid)
+            organization_members__user=username)

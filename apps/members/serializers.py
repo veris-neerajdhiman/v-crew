@@ -56,7 +56,7 @@ class MemberSerializer(serializers.ModelSerializer):
         organization = self.request.parser_context.get('kwargs').get('organization')
 
         return self.request.build_absolute_uri(reverse(url_name,
-                                                       args=(owner, organization, obj.uuid)))
+                                                       args=(organization, obj.uuid)))
 
 
 class MemberAddSerializer(serializers.ModelSerializer):
@@ -92,14 +92,13 @@ class MemberAddSerializer(serializers.ModelSerializer):
         """
         from django.urls import reverse
 
-        # import ipdb;ipdb.set_trace()
+        import ipdb;ipdb.set_trace()
         url_name = '{app_namespace}:member-urls:members-detail'.format(app_namespace=getattr(settings, 'APP_NAMESPACE'))
 
-        owner = self.request.parser_context.get('kwargs').get('owner')
         organization = self.request.parser_context.get('kwargs').get('organization')
 
         return self.request.build_absolute_uri(reverse(url_name,
-                                                       args=(owner, organization, obj.uuid)))
+                                                       args=(organization, obj.uuid)))
 
     def _get_user_api(self):
         """
@@ -128,9 +127,11 @@ class MemberAddSerializer(serializers.ModelSerializer):
             'is_active': False
         }
 
+        user = requests.post(url, data=data).json()
+
         # ToDo : Not checking for any error in below API
         # return requests.post(url, files={'avatar': image}, data=data).json()
-        return requests.post(url, data=data).json()
+        return user
 
     def create(self, validated_data):
         """
@@ -144,11 +145,11 @@ class MemberAddSerializer(serializers.ModelSerializer):
         # create shadow user and save user token in Member instance
         email = validated_data.get('email')
         user = self._get_or_create_shadow_user(email)
+        username = user.get('email')
 
         validated_data.update({
-            'user': user.get('uuid')
+            'user': username.replace('@', '__')
         })
-
         return super(MemberAddSerializer, self).create(validated_data)
 
 
@@ -157,7 +158,6 @@ class MemberShipSerializer(serializers.ModelSerializer):
 
     """
     organization = serializers.SerializerMethodField()
-
 
     class Meta:
         model = models.Member

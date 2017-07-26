@@ -20,6 +20,7 @@ from pilkit.processors.resize import ResizeToFill
 
 # Django
 from django.db import models
+from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
 # local
@@ -60,10 +61,7 @@ class Organization(models.Model):
     #     format='JPEG',
     #     options={'quality': 60}
     # )
-    owner = models.UUIDField(
-        _('Owner Unique Identifier'),
-        help_text=_('User uuid, this token will identify who is the owner of respective Organization.'),
-    )
+    user = models.ForeignKey(User)
     created_at = models.DateTimeField(
         _('Organization Creation time.'),
         auto_now_add=True,

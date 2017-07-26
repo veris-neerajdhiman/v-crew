@@ -33,19 +33,12 @@ organization_detail = views.OrganizationViewSet.as_view({
     'delete': 'destroy'
 })
 
-organization_service_list = views.OrganizationViewSet.as_view({
-    'get': 'get_organization_service',
-})
-
 
 urlpatterns = [
-    url(r'^user/(?P<owner>{uuid})/organization/$'.format(uuid=UUID_REGEX),
+    url(r'^organization/$',
         organization_list,
         name='organization-list'),
-    url(r'^user/(?P<owner>{uuid})/organization/(?P<token>{uuid})/$'.format(uuid=UUID_REGEX),
+    url(r'^organization/(?P<token>{uuid})/$'.format(uuid=UUID_REGEX),
         organization_detail,
         name='organization-detail'),
-    url(r'^user/(?P<owner>{uuid})/organization/(?P<token>{uuid})/services/$'.format(uuid=UUID_REGEX),
-        organization_service_list,
-        name='organization-service'),
 ]

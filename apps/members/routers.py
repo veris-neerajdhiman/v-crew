@@ -38,10 +38,10 @@ member_organization_list = views.MemberShipViewSet.as_view({
 
 
 urlpatterns = [
-    url(r'^user/(?P<owner>{uuid})/organization/(?P<organization>{uuid})/member/$'.format(uuid=UUID_REGEX),
+    url(r'^organization/(?P<organization>{uuid})/member/$'.format(uuid=UUID_REGEX),
         members_list,
         name='members-list'),
-    url(r'^user/(?P<owner>{uuid})/organization/(?P<organization>{uuid})/member/(?P<uuid>{uuid})/$'.format(uuid=UUID_REGEX),
+    url(r'^organization/(?P<organization>{uuid})/member/(?P<uuid>{uuid})/$'.format(uuid=UUID_REGEX),
         members_detail,
         name='members-detail'),
     url(r'^member/(?P<member_user_uuid>{uuid})/organization/$'.format(uuid=UUID_REGEX),

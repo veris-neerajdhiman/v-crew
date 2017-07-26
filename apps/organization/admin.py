@@ -24,7 +24,7 @@ from apps.organization import models
 
 
 class OrganizationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'token', 'name', 'avatar', 'owner', 'created_at', 'modified_at', )
+    list_display = ('id', 'token', 'name', 'avatar', 'user', 'created_at', 'modified_at', )
     list_display_links = ('id', 'name', )
     search_fields = ('name', )
     list_per_page = 20
