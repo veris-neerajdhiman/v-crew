@@ -55,23 +55,3 @@ def to_pascal_case(text, split_chars='-_'):
     split_chars_regex = '[{}]'.format(split_chars)
     pascal_case = gen_pascal_case()
     return ''.join(next(pascal_case)(_) for _ in re.split(split_chars_regex, text))
-
-
-def get_permissions_from_names(services):
-    """
-
-    :param services: service list includes service names
-    :return: Service from service vault
-    """
-    url = '{0}{1}'.format(
-        getattr(settings, 'SERVICE_VAULT_URL'),
-        getattr(settings, 'SERVICE_LIST_PATH')
-    )
-
-    params = {
-        'names': ','.join(services)
-    }
-
-    rq = requests.get(url, params=params, verify=True)
-
-    return rq.json()
