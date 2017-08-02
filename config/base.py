@@ -318,7 +318,10 @@ APP_NAMESPACE = 'apps'
 
 # ################# JWT ########################
 
+ISSUER = 'noapp'
 AUDIENCE = 'noapp-services'
+ALGORITHM = 'HS256'
+TOKEN_EXPIRATION_TIME = 432000  # (in seconds)
 JWT_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzj8vNzN+TPPeg4VJefx5dzvwJVvjLgRs+bd7iZbOl2JJnyNlMcMc5pJ2CrN+78IvnAsr/Vh57ZJEwy5y+MPxjjf8U5LmlgM65lpMN07I3SST8jRWYr1+KX50e7vvueYRY8y7sSkKVMIbqgu7tOfcsbsyk/MStuJQPFFPBun0CuqA4JXvtQwS+y4Qb7UbjhmkCsfRzBiV34uODja8QjXWvdF/n01VGG4wd0898Pzb7CogebMUvfGk7/3K82x1hZBotHxKDNYz/TPIr0+v/+MK5UxoLedHueMdwxJNtY2ska2wBQQ0avN6EV5NMGV2k/OrP0kQ7cQwi6MW71IrwtntKwIDAQAB"
 
 # ################## ENDS JWT ###############################

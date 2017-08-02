@@ -13,6 +13,7 @@ from __future__ import unicode_literals
 
 # 3rd party
 import requests
+from datetime import datetime, timedelta
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from rest_framework.exceptions import NotAcceptable
@@ -22,6 +23,7 @@ from django.conf import settings
 
 # local
 from apps.organization.serializers import OrganizationSerializer
+from auth import jwt
 
 # own app
 from apps.members import models, config
@@ -32,15 +34,36 @@ class MemberSerializer(serializers.ModelSerializer):
 
     """
     url = serializers.SerializerMethodField()
+    token = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Member
-        fields = ('url', 'uuid', 'name', 'email', 'user', 'type', 'organization', 'created_at', 'modified_at', )
+        fields = ('url', 'uuid', 'name', 'email', 'user', 'type', 'organization', 'created_at', 'modified_at', 'token', )
         read_only_fields = ('id', 'email', )
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(MemberSerializer, self).__init__(*args, **kwargs)
+
+    def _get_jwt_payload(member):
+        """
+        :param user: Member object
+        :return: jwt necessary information
+        """
+        expiration_time = datetime.utcnow() + timedelta(seconds=getattr(settings, 'TOKEN_EXPIRATION_TIME', 432000))
+
+        return {
+            'info': {
+                'name': member.name,
+                'email': member.email,
+                'type': member.type,
+                'uuid': member.uuid
+            },
+            'exp': expiration_time,
+            'iat': datetime.utcnow(),
+            'iss': getattr(settings, 'ISSUER', 'noapp'),
+            'aud': getattr(settings, 'AUDIENCE', 'noapp-services')
+        }
 
     def get_url(self, obj):
         """
@@ -57,6 +80,19 @@ class MemberSerializer(serializers.ModelSerializer):
 
         return self.request.build_absolute_uri(reverse(url_name,
                                                        args=(organization, obj.uuid)))
+
+    def get_token(self, obj):
+        """
+
+        :param obj: Member object
+        :return: Member token
+        """
+
+        payload = self._get_jwt_payload(obj)
+        return jwt.create_jwt(payload,
+                              getattr(settings, 'JWT_PUBLIC_KEY', None),
+                              getattr(settings, 'ALGORITHM', 'HS256')
+                              )
 
 
 class MemberAddSerializer(serializers.ModelSerializer):
@@ -83,22 +119,6 @@ class MemberAddSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(MemberAddSerializer, self).__init__(*args, **kwargs)
-
-    def get_url(self, obj):
-        """
-
-        :param obj:
-        :return:
-        """
-        from django.urls import reverse
-
-        import ipdb;ipdb.set_trace()
-        url_name = '{app_namespace}:member-urls:members-detail'.format(app_namespace=getattr(settings, 'APP_NAMESPACE'))
-
-        organization = self.request.parser_context.get('kwargs').get('organization')
-
-        return self.request.build_absolute_uri(reverse(url_name,
-                                                       args=(organization, obj.uuid)))
 
     def _get_user_api(self):
         """
@@ -132,6 +152,21 @@ class MemberAddSerializer(serializers.ModelSerializer):
         # ToDo : Not checking for any error in below API
         # return requests.post(url, files={'avatar': image}, data=data).json()
         return user
+
+    def get_url(self, obj):
+        """
+
+        :param obj: Member object
+        :return: Member-detail API url
+        """
+        from django.urls import reverse
+
+        url_name = '{app_namespace}:member-urls:members-detail'.format(app_namespace=getattr(settings, 'APP_NAMESPACE'))
+
+        organization = self.request.parser_context.get('kwargs').get('organization')
+
+        return self.request.build_absolute_uri(reverse(url_name,
+                                                       args=(organization, obj.uuid)))
 
     def create(self, validated_data):
         """
